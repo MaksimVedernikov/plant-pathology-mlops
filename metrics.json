@@ -1,0 +1,7 @@
+{
+  "model": "logistic_regression",
+  "use_augmentation": false,
+  "accuracy": 0.5833333333333334,
+  "f1_macro": 0.5555555555555556,
+  "test_samples": 12
+}

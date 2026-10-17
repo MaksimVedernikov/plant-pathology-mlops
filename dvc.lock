@@ -1,0 +1,116 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 72702369d5858c53a1b65f318937f28c.dir
+      size: 823792065
+      nfiles: 3645
+    - path: src/common.py
+      hash: md5
+      md5: c267b4470a3292b6f87ea6d6b0af4893
+      size: 1515
+    - path: src/prepare.py
+      hash: md5
+      md5: f523bcc2e7cecec22e9c420ad30e541c
+      size: 10508
+    params:
+      params.yaml:
+        prepare.max_images_per_class: 30
+        prepare.seed: 42
+        prepare.test_size: 0.2
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 7ed5a6daefa0114c4777bfbc8bb1108f.dir
+      size: 2055
+      nfiles: 3
+  augment:
+    cmd: python src/augment.py
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 7ed5a6daefa0114c4777bfbc8bb1108f.dir
+      size: 2055
+      nfiles: 3
+    - path: src/augment.py
+      hash: md5
+      md5: 610f02aa5aa64828614cd46e21ba07cf
+      size: 2500
+    - path: src/common.py
+      hash: md5
+      md5: c267b4470a3292b6f87ea6d6b0af4893
+      size: 1515
+    params:
+      params.yaml:
+        augment.num_per_image: 1
+        prepare.seed: 42
+        train.use_augmentation: false
+    outs:
+    - path: data/augmented
+      hash: md5
+      md5: bb6457c128da03d84c6984fb2151b3c8.dir
+      size: 18
+      nfiles: 1
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/augmented
+      hash: md5
+      md5: bb6457c128da03d84c6984fb2151b3c8.dir
+      size: 18
+      nfiles: 1
+    - path: data/prepared
+      hash: md5
+      md5: 7ed5a6daefa0114c4777bfbc8bb1108f.dir
+      size: 2055
+      nfiles: 3
+    - path: src/common.py
+      hash: md5
+      md5: c267b4470a3292b6f87ea6d6b0af4893
+      size: 1515
+    - path: src/train.py
+      hash: md5
+      md5: d8aa76116a2896a45a1ede7e18df06a8
+      size: 2377
+    params:
+      params.yaml:
+        prepare.seed: 42
+        train.image_size: 32
+        train.model: logistic_regression
+        train.use_augmentation: false
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 2922712d16ce317977dde876717ccb0a
+      size: 5026
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 7ed5a6daefa0114c4777bfbc8bb1108f.dir
+      size: 2055
+      nfiles: 3
+    - path: models/model.joblib
+      hash: md5
+      md5: 2922712d16ce317977dde876717ccb0a
+      size: 5026
+    - path: src/common.py
+      hash: md5
+      md5: c267b4470a3292b6f87ea6d6b0af4893
+      size: 1515
+    - path: src/evaluate.py
+      hash: md5
+      md5: a5f99a49fb4c256edab0244cd68fd488
+      size: 1300
+    params:
+      params.yaml:
+        train.image_size: 32
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 119cd8695d0089ddc36587ccf9f4049e
+      size: 161
