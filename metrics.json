@@ -1,7 +1,7 @@
 {
-  "model": "svm",
-  "use_augmentation": false,
-  "accuracy": 0.5833333333333334,
-  "f1_macro": 0.4957983193277311,
+  "model": "logistic_regression",
+  "use_augmentation": true,
+  "accuracy": 0.75,
+  "f1_macro": 0.7482517482517483,
   "test_samples": 12
 }
