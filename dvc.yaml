@@ -1,0 +1,54 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - src/prepare.py
+      - src/common.py
+      - data/raw
+    params:
+      - prepare.seed
+      - prepare.test_size
+      - prepare.max_images_per_class
+    outs:
+      - data/prepared
+
+  augment:
+    cmd: python src/augment.py
+    deps:
+      - src/augment.py
+      - src/common.py
+      - data/prepared
+    params:
+      - prepare.seed
+      - train.use_augmentation
+      - augment.num_per_image
+    outs:
+      - data/augmented
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - src/common.py
+      - data/prepared
+      - data/augmented
+    params:
+      - prepare.seed
+      - train.model
+      - train.use_augmentation
+      - train.image_size
+    outs:
+      - models/model.joblib
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - src/common.py
+      - models/model.joblib
+      - data/prepared
+    params:
+      - train.image_size
+    metrics:
+      - metrics.json:
+          cache: false

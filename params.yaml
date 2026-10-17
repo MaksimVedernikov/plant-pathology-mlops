@@ -1,0 +1,12 @@
+prepare:
+  seed: 42
+  test_size: 0.2
+  max_images_per_class: 30
+
+train:
+  model: logistic_regression
+  use_augmentation: false
+  image_size: 32
+
+augment:
+  num_per_image: 1
