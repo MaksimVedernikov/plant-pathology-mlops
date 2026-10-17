@@ -79,13 +79,13 @@ stages:
       params.yaml:
         prepare.seed: 42
         train.image_size: 32
-        train.model: random_forest
+        train.model: svm
         train.use_augmentation: true
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: a20dde396610465f717ad9b221eaa0cb
-      size: 214650
+      md5: 18e2fbe68bce781b9d7793be565a5965
+      size: 8995
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -96,8 +96,8 @@ stages:
       nfiles: 3
     - path: models/model.joblib
       hash: md5
-      md5: a20dde396610465f717ad9b221eaa0cb
-      size: 214650
+      md5: 18e2fbe68bce781b9d7793be565a5965
+      size: 8995
     - path: src/common.py
       hash: md5
       md5: c267b4470a3292b6f87ea6d6b0af4893
@@ -112,5 +112,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 7bdf9383684ac8421c73b6e5bb4aa4d6
-      size: 154
+      md5: 59eee645d6a1110fe551762a04b61802
+      size: 130

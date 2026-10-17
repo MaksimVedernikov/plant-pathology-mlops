@@ -4,7 +4,7 @@ prepare:
   max_images_per_class: 30
 
 train:
-  model: random_forest
+  model: svm
   use_augmentation: true
   image_size: 32
 
