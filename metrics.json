@@ -1,7 +1,7 @@
 {
-  "model": "logistic_regression",
+  "model": "random_forest",
   "use_augmentation": true,
-  "accuracy": 0.75,
-  "f1_macro": 0.7482517482517483,
+  "accuracy": 0.5833333333333334,
+  "f1_macro": 0.5804195804195804,
   "test_samples": 12
 }
