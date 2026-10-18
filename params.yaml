@@ -4,8 +4,8 @@ prepare:
   max_images_per_class: 0
 
 train:
-  model: random_forest
-  use_augmentation: true
+  model: logistic_regression
+  use_augmentation: false
   image_size: 128
 
 augment:
