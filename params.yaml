@@ -4,7 +4,7 @@ prepare:
   max_images_per_class: 32
 
 train:
-  model: logistic_regression
+  model: random_forest
   use_augmentation: false
   image_size: 128
 
