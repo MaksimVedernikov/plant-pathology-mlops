@@ -5,7 +5,7 @@ prepare:
 
 train:
   model: svm
-  use_augmentation: false
+  use_augmentation: true
   image_size: 128
 
 augment:

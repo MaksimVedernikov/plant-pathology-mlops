@@ -47,20 +47,20 @@ stages:
       params.yaml:
         augment.num_per_image: 1
         prepare.seed: 42
-        train.use_augmentation: false
+        train.use_augmentation: true
     outs:
     - path: data/augmented
       hash: md5
-      md5: bb6457c128da03d84c6984fb2151b3c8.dir
-      size: 18
-      nfiles: 1
+      md5: 31d38b3c5b9c72abb92bb23176b64c4c.dir
+      size: 322981460
+      nfiles: 1457
   train:
     cmd: python src/train.py
     deps:
     - path: data/features
       hash: md5
-      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
-      size: 7388493
+      md5: a03110f9920b5cc45a1906d518dac522.dir
+      size: 13283340
       nfiles: 2
     - path: src/common.py
       hash: md5
@@ -75,23 +75,23 @@ stages:
         prepare.seed: 42
         train.image_size: 128
         train.model: svm
-        train.use_augmentation: false
+        train.use_augmentation: true
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 369afafda3a393beb581d67a9665eb5b
+      md5: e9eee784073d4b20fb7f9095212e642e
       size: 73229
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: data/features
       hash: md5
-      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
-      size: 7388493
+      md5: a03110f9920b5cc45a1906d518dac522.dir
+      size: 13283340
       nfiles: 2
     - path: models/model.joblib
       hash: md5
-      md5: 369afafda3a393beb581d67a9665eb5b
+      md5: e9eee784073d4b20fb7f9095212e642e
       size: 73229
     - path: src/common.py
       hash: md5
@@ -107,16 +107,16 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: e0e3a479d59287c5ac0196b1a7ff9c31
-      size: 184
+      md5: f0c674aa37b3e3407c546cfbc6eb9653
+      size: 182
   featurize:
     cmd: python src/featurize.py
     deps:
     - path: data/augmented
       hash: md5
-      md5: bb6457c128da03d84c6984fb2151b3c8.dir
-      size: 18
-      nfiles: 1
+      md5: 31d38b3c5b9c72abb92bb23176b64c4c.dir
+      size: 322981460
+      nfiles: 1457
     - path: data/prepared
       hash: md5
       md5: 4a4bd84a89982eb0d3dee4d6e975fb4b.dir
@@ -133,10 +133,10 @@ stages:
     params:
       params.yaml:
         train.image_size: 128
-        train.use_augmentation: false
+        train.use_augmentation: true
     outs:
     - path: data/features
       hash: md5
-      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
-      size: 7388493
+      md5: a03110f9920b5cc45a1906d518dac522.dir
+      size: 13283340
       nfiles: 2

@@ -1,8 +1,8 @@
 {
   "model": "svm",
-  "use_augmentation": false,
-  "accuracy": 0.7123287671232876,
-  "f1_macro": 0.5847407342801145,
-  "f1_weighted": 0.7115470901363048,
+  "use_augmentation": true,
+  "accuracy": 0.7095890410958904,
+  "f1_macro": 0.5936300291769042,
+  "f1_weighted": 0.710282566907702,
   "test_samples": 365
 }
