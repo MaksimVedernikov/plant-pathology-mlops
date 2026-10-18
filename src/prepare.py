@@ -126,6 +126,7 @@ def resolve_image(value, csv_dir, image_index):
 
 def find_image_column(df):
     preferred = [
+        "image_id",
         "image",
         "image_path",
         "filename",
@@ -133,6 +134,7 @@ def find_image_column(df):
         "path",
         "image_name",
         "file_name",
+        "id",
     ]
 
     for col in preferred:
@@ -153,13 +155,30 @@ def find_image_column(df):
 
     return df.columns[0]
 
-
 def find_label_column(df):
-    for col in df.columns:
-        if any(word in col for word in ["label", "class", "target", "disease"]):
-            return col
-    return None
+    exact_candidates = [
+        "label",
+        "labels",
+        "class",
+        "class_name",
+        "target",
+        "target_label",
+        "y"
+    ]
 
+    for col in exact_candidates:
+        if col in df.columns:
+            return col
+
+    for col in df.columns:
+        if col in {"image_id", "image", "filename", "file", "path", "id"}:
+            continue
+
+        if not pd.api.types.is_numeric_dtype(df[col]):
+            if any(word in col for word in ["label", "class", "target", "disease"]):
+                return col
+
+    return None
 
 def collect_from_csv(csv_path):
     df = pd.read_csv(csv_path)
@@ -177,13 +196,17 @@ def collect_from_csv(csv_path):
                 continue
             if col in {"id", "index"}:
                 continue
-            if any(word in col for word in ["image", "file", "path", "name", "index", "level", "unnamed"]):
+            if any(word in col for word in
+                   ["image", "file", "path", "name", "index", "level", "unnamed"]):
                 continue
             if pd.api.types.is_numeric_dtype(df[col]):
                 candidates.append(col)
 
-        if candidates:
-            labels = df[candidates].idxmax(axis=1).astype(str)
+        if len(candidates) >= 2:
+            onehot = df[candidates].fillna(0)
+            labels = onehot.idxmax(axis=1).astype(str)
+        elif len(candidates) == 1:
+            labels = df[candidates[0]].astype(str)
         else:
             non_image_cols = [c for c in df.columns if c != img_col]
             if not non_image_cols:

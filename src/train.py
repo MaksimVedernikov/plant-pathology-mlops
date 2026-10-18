@@ -13,19 +13,27 @@ def get_model(name, seed):
     name = name.lower()
 
     if name == "logistic_regression":
-        return LogisticRegression(max_iter=1000, random_state=seed)
+        return LogisticRegression(
+            max_iter=1000,
+            class_weight="balanced",
+            random_state=seed
+        )
 
     if name == "random_forest":
         return RandomForestClassifier(
             n_estimators=100,
+            class_weight="balanced",
             random_state=seed
         )
 
     if name == "svm":
-        return LinearSVC(max_iter=2000, random_state=seed)
+        return LinearSVC(
+            max_iter=2000,
+            class_weight="balanced",
+            random_state=seed
+        )
 
     raise ValueError(f"Неизвестная модель: {name}")
-
 
 def main():
     params = read_params()
