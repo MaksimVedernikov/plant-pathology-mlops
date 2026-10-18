@@ -4,8 +4,8 @@ prepare:
   max_images_per_class: 32
 
 train:
-  model: svm
-  use_augmentation: false
+  model: logistic_regression
+  use_augmentation: true
   image_size: 128
 
 augment:
