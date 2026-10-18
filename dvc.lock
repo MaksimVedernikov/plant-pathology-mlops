@@ -18,22 +18,22 @@ stages:
       size: 11124
     params:
       params.yaml:
-        prepare.max_images_per_class: 32
+        prepare.max_images_per_class: 0
         prepare.seed: 42
         prepare.test_size: 0.2
     outs:
     - path: data/prepared
       hash: md5
-      md5: b759421dbc24a0ca0620cce2bab9f7c0.dir
-      size: 5262
+      md5: 4a4bd84a89982eb0d3dee4d6e975fb4b.dir
+      size: 69097
       nfiles: 3
   augment:
     cmd: python src/augment.py
     deps:
     - path: data/prepared
       hash: md5
-      md5: b759421dbc24a0ca0620cce2bab9f7c0.dir
-      size: 5262
+      md5: 4a4bd84a89982eb0d3dee4d6e975fb4b.dir
+      size: 69097
       nfiles: 3
     - path: src/augment.py
       hash: md5
@@ -47,20 +47,20 @@ stages:
       params.yaml:
         augment.num_per_image: 1
         prepare.seed: 42
-        train.use_augmentation: true
+        train.use_augmentation: false
     outs:
     - path: data/augmented
       hash: md5
-      md5: 54190674ef8a581fec3d990eeeafea2f.dir
-      size: 23209379
-      nfiles: 103
+      md5: bb6457c128da03d84c6984fb2151b3c8.dir
+      size: 18
+      nfiles: 1
   train:
     cmd: python src/train.py
     deps:
     - path: data/features
       hash: md5
-      md5: fd861844fe093520e06d1c6661e08c06.dir
-      size: 937354
+      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
+      size: 7388493
       nfiles: 2
     - path: src/common.py
       hash: md5
@@ -74,25 +74,25 @@ stages:
       params.yaml:
         prepare.seed: 42
         train.image_size: 128
-        train.model: svm
-        train.use_augmentation: true
+        train.model: random_forest
+        train.use_augmentation: false
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: f1bfa1345447569df000a97bd0f55b82
-      size: 73228
+      md5: 9b59c5907462211d8a74583ce97046af
+      size: 12078819
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: data/features
       hash: md5
-      md5: fd861844fe093520e06d1c6661e08c06.dir
-      size: 937354
+      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
+      size: 7388493
       nfiles: 2
     - path: models/model.joblib
       hash: md5
-      md5: f1bfa1345447569df000a97bd0f55b82
-      size: 73228
+      md5: 9b59c5907462211d8a74583ce97046af
+      size: 12078819
     - path: src/common.py
       hash: md5
       md5: c267b4470a3292b6f87ea6d6b0af4893
@@ -107,20 +107,20 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 6d3f780564438af8073b3c3a0435a6d9
-      size: 183
+      md5: 1ff6ede5ac6a260665462e73438616c9
+      size: 194
   featurize:
     cmd: python src/featurize.py
     deps:
     - path: data/augmented
       hash: md5
-      md5: 54190674ef8a581fec3d990eeeafea2f.dir
-      size: 23209379
-      nfiles: 103
+      md5: bb6457c128da03d84c6984fb2151b3c8.dir
+      size: 18
+      nfiles: 1
     - path: data/prepared
       hash: md5
-      md5: b759421dbc24a0ca0620cce2bab9f7c0.dir
-      size: 5262
+      md5: 4a4bd84a89982eb0d3dee4d6e975fb4b.dir
+      size: 69097
       nfiles: 3
     - path: src/common.py
       hash: md5
@@ -133,10 +133,10 @@ stages:
     params:
       params.yaml:
         train.image_size: 128
-        train.use_augmentation: true
+        train.use_augmentation: false
     outs:
     - path: data/features
       hash: md5
-      md5: fd861844fe093520e06d1c6661e08c06.dir
-      size: 937354
+      md5: 48d7ef607849b9e04aa1acd9282adc7b.dir
+      size: 7388493
       nfiles: 2
