@@ -1,39 +1,50 @@
-from pathlib import Path
-
 import joblib
-import pandas as pd
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
-from common import PROJECT_ROOT, read_params, load_xy
+from common import PROJECT_ROOT, read_params
 
 
 def get_model(name, seed):
     name = name.lower()
 
     if name == "logistic_regression":
-        return LogisticRegression(
-            max_iter=1000,
-            class_weight="balanced",
-            random_state=seed
-        )
+        return Pipeline([
+            ("scaler", StandardScaler()),
+            ("model", LogisticRegression(
+                max_iter=2000,
+                class_weight="balanced",
+                random_state=seed
+            ))
+        ])
 
     if name == "random_forest":
-        return RandomForestClassifier(
-            n_estimators=100,
-            class_weight="balanced",
-            random_state=seed
-        )
+        return Pipeline([
+            ("scaler", StandardScaler()),
+            ("model", RandomForestClassifier(
+                n_estimators=300,
+                class_weight="balanced",
+                random_state=seed,
+                n_jobs=-1
+            ))
+        ])
 
     if name == "svm":
-        return LinearSVC(
-            max_iter=2000,
-            class_weight="balanced",
-            random_state=seed
-        )
+        return Pipeline([
+            ("scaler", StandardScaler()),
+            ("model", LinearSVC(
+                max_iter=5000,
+                class_weight="balanced",
+                random_state=seed
+            ))
+        ])
 
     raise ValueError(f"Неизвестная модель: {name}")
+
 
 def main():
     params = read_params()
@@ -43,27 +54,21 @@ def main():
 
     model_name = str(train_params.get("model", "logistic_regression"))
     use_augmentation = bool(train_params.get("use_augmentation", False))
-    image_size = int(train_params.get("image_size", 32))
+    image_size = int(train_params.get("image_size", 128))
     seed = int(prepare_params.get("seed", 42))
 
-    prepared_dir = PROJECT_ROOT / "data" / "prepared"
-    augmented_dir = PROJECT_ROOT / "data" / "augmented"
+    features_path = PROJECT_ROOT / "data" / "features" / "train_features.npz"
 
-    train_df = pd.read_csv(prepared_dir / "train.csv")
-
-    if use_augmentation:
-        aug_df = pd.read_csv(augmented_dir / "train.csv")
-        if len(aug_df) > 0:
-            train_df = pd.concat([train_df, aug_df], ignore_index=True)
+    data = np.load(features_path, allow_pickle=False)
+    X = data["X"]
+    y = data["y"]
 
     print(f"Модель: {model_name}")
     print(f"Аугментация: {use_augmentation}")
-    print(f"Обучающих изображений: {len(train_df)}")
-
-    X, y = load_xy(train_df, image_size)
+    print(f"Обучающих объектов: {len(X)}")
 
     if len(X) == 0:
-        raise SystemExit("Не удалось загрузить обучающие изображения.")
+        raise SystemExit("Не удалось загрузить обучающие признаки.")
 
     model = get_model(model_name, seed)
     model.fit(X, y)

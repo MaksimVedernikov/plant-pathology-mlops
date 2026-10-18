@@ -1,10 +1,10 @@
 import json
 
 import joblib
-import pandas as pd
+import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
-from common import PROJECT_ROOT, load_xy
+from common import PROJECT_ROOT
 
 
 def main():
@@ -12,16 +12,17 @@ def main():
     bundle = joblib.load(model_path)
 
     model = bundle["model"]
-    image_size = bundle.get("image_size", 32)
 
-    test_df = pd.read_csv(PROJECT_ROOT / "data" / "prepared" / "test.csv")
+    test_path = PROJECT_ROOT / "data" / "features" / "test_features.npz"
+    data = np.load(test_path, allow_pickle=False)
 
-    print(f"Тестовых изображений: {len(test_df)}")
+    X = data["X"]
+    y = data["y"]
 
-    X, y = load_xy(test_df, image_size)
+    print(f"Тестовых объектов: {len(X)}")
 
     if len(X) == 0:
-        raise SystemExit("Не удалось загрузить тестовые изображения.")
+        raise SystemExit("Не удалось загрузить тестовые признаки.")
 
     predictions = model.predict(X)
 
@@ -30,6 +31,7 @@ def main():
         "use_augmentation": bundle.get("use_augmentation"),
         "accuracy": float(accuracy_score(y, predictions)),
         "f1_macro": float(f1_score(y, predictions, average="macro", zero_division=0)),
+        "f1_weighted": float(f1_score(y, predictions, average="weighted", zero_division=0)),
         "test_samples": int(len(y))
     }
 

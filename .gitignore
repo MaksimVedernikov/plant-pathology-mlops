@@ -225,5 +225,6 @@ __marimo__/
 data/raw/
 data/prepared/
 data/augmented/
+data/features/
 models/
 *.joblib

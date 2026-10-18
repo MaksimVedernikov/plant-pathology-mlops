@@ -25,13 +25,25 @@ stages:
     outs:
       - data/augmented
 
+  featurize:
+    cmd: python src/featurize.py
+    deps:
+      - src/featurize.py
+      - src/common.py
+      - data/prepared
+      - data/augmented
+    params:
+      - train.use_augmentation
+      - train.image_size
+    outs:
+      - data/features
+
   train:
     cmd: python src/train.py
     deps:
       - src/train.py
       - src/common.py
-      - data/prepared
-      - data/augmented
+      - data/features
     params:
       - prepare.seed
       - train.model
@@ -46,7 +58,7 @@ stages:
       - src/evaluate.py
       - src/common.py
       - models/model.joblib
-      - data/prepared
+      - data/features
     params:
       - train.image_size
     metrics:
