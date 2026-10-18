@@ -5,7 +5,7 @@ prepare:
 
 train:
   model: random_forest
-  use_augmentation: false
+  use_augmentation: true
   image_size: 128
 
 augment:

@@ -1,8 +1,8 @@
 {
   "model": "random_forest",
-  "use_augmentation": false,
-  "accuracy": 0.7452054794520548,
-  "f1_macro": 0.5724385129034555,
-  "f1_weighted": 0.7281712896154642,
+  "use_augmentation": true,
+  "accuracy": 0.7397260273972602,
+  "f1_macro": 0.5686837463853408,
+  "f1_weighted": 0.7227717530970068,
   "test_samples": 365
 }

@@ -18,12 +18,10 @@ def find_csv():
     if not csv_files:
         return None
 
-    # Сначала ищем именно train.csv
     for p in csv_files:
         if p.name.lower() == "train.csv":
             return p
 
-    # Если нет, ищем любой train-файл, но не test и не submission
     for p in csv_files:
         name = p.name.lower()
         if "train" in name and "test" not in name and "submission" not in name:
