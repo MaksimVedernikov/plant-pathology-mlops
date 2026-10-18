@@ -1,12 +1,12 @@
 prepare:
   seed: 42
   test_size: 0.2
-  max_images_per_class: 30
+  max_images_per_class: 0
 
 train:
-  model: svm
+  model: logistic_regression
   use_augmentation: true
-  image_size: 32
+  image_size: 64
 
 augment:
   num_per_image: 1
