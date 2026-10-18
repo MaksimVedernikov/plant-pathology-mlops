@@ -74,13 +74,13 @@ stages:
       params.yaml:
         prepare.seed: 42
         train.image_size: 128
-        train.model: logistic_regression
+        train.model: random_forest
         train.use_augmentation: true
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: e415d94fb137c5f38e6bd0dbd138cbde
-      size: 52912
+      md5: c3859f55955e4f7faeac0e9975681afe
+      size: 2265283
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -91,8 +91,8 @@ stages:
       nfiles: 2
     - path: models/model.joblib
       hash: md5
-      md5: e415d94fb137c5f38e6bd0dbd138cbde
-      size: 52912
+      md5: c3859f55955e4f7faeac0e9975681afe
+      size: 2265283
     - path: src/common.py
       hash: md5
       md5: c267b4470a3292b6f87ea6d6b0af4893
@@ -107,8 +107,8 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: e32dc35847cc5a0c7cc586db3fcb6d0d
-      size: 199
+      md5: be3bf7ad8e51dd1b70c1eef71566de62
+      size: 192
   featurize:
     cmd: python src/featurize.py
     deps:
